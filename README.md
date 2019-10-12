@@ -1,0 +1,2 @@
+# codequiz
+JS codequiz
