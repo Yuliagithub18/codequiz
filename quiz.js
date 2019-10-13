@@ -8,6 +8,25 @@ let acceptingAnswers = false;
 let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
+var timer = 75;
+var timerEl = document.querySelector("#timer")
+var timeEl = document.querySelector("time");
+var mainEl = document.getElementById("main");
+var secondsLeft = 75;
+
+
+function setTime() {
+  var timerInterval = setInterval(function () {
+    secondsLeft--;
+    timerEl.textContent = secondsLeft;
+    if (secondsLeft === 0 || startQuizBtn) {
+      clearInterval(timerInterval);
+      nextQuestion();
+    }
+
+  }, 1000);
+}
+
 
 let questions = [
   {
@@ -35,41 +54,23 @@ let questions = [
     choice4: "all of the above;",
     answer: 4
   },
-    {
+  {
     question: "String values must be enclosed within ____ being assigned to variables.",
     choice1: "commas;",
     choice2: "curly brackets;",
     choice3: "quotes;",
     choice4: "parentheses;",
     answer: 2
-    },
-     {
+  },
+  {
     question: "A very useful tool used during development and debugging for printing content to the debugger is.",
     choice1: "JavaScript;",
     choice2: "Terminal/bash;",
     choice3: "For loops;",
     choice4: "console.log;",
     answer: 1
-    }
+  }
 ];
-
-var timeEl = document.querySelector(".time");
-var mainEl = document.getElementById("main");
-
-var secondsLeft = 15;
-
-function setTime() {
-  var timerInterval = setInterval(function() {
-    secondsLeft--;
-    timeEl.textContent = secondsLeft + " seconds left till colorsplosion.";
-
-    if(secondsLeft === 0) {
-      clearInterval(timerInterval);
-      startGame();
-    }
-
-  }, 1000);
-}
 
 //CONSTANTS
 const CORRECT_BONUS = 10;
@@ -83,9 +84,10 @@ startGame = () => {
 };
 
 getNewQuestion = () => {
+
   if (availableQuestions.length === 0 || questionCounter >= MAX_QUESTIONS) {
     //go to the end page
-    return window.location.href = "end.html";
+    return window.location.href = ("end.html");
   }
   questionCounter++;
   const questionIndex = Math.floor(Math.random() * availableQuestions.length);
@@ -101,7 +103,7 @@ getNewQuestion = () => {
   acceptingAnswers = true;
 };
 
-   choices.forEach(choice => {
+choices.forEach(choice => {
   choice.addEventListener("click", e => {
     if (!acceptingAnswers) return;
 
@@ -112,9 +114,9 @@ getNewQuestion = () => {
     const classToApply =
       selectedAnswer == currentQuestion.answer ? "correct" : "incorrect";
 
-      if (classToApply === "correct") {
-        incrementScore(CORRECT_BONUS);
-      }
+    if (classToApply === "correct") {
+      incrementScore(CORRECT_BONUS);
+    }
 
     selectedChoice.parentElement.classList.add(classToApply);
 
@@ -130,4 +132,5 @@ incrementScore = num => {
   scoreText.innerText = score;
 };
 
+setTime();
 startGame();
